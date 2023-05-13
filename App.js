@@ -1,20 +1,96 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { TextInput, Button } from 'react-native-paper'
+import { useForm, Controller } from 'react-hook-form';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { styles } from './assets/styles/styles';
 
 export default function App() {
+  // configuración del formulario
+  const { control, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: {
+      firstName: '',
+      lastName: ''
+    }
+  });
+
+  const onSubmit = data => console.log(data);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Text>Actualización de Clientes</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            label="Nombre Completo"
+            mode="outlined"
+            style={{ backgroundColor: 'powderblue' }}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="firstName"
+      />
+      {errors.firstName && <Text style={{ color: 'red' }}>El nombre es obligatorio</Text>}
+
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            label="Apellidos"
+            mode="outlined"
+            style={{ marginTop: 10 }}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="lastName"
+      />
+      {errors.lastName && <Text style={{ color: 'red' }}>El apellido es obligatorio</Text>}
+      <View style={{marginTop:20, flexDirection:'row'}}>
+        <Button 
+          icon="content-save" 
+          mode="contained" onPress={() => console.log('Pressed')}>
+          Guardar
+        </Button>
+        <Button 
+          style={{backgroundColor:'orange',marginLeft:10}}
+          icon="card-search-outline" 
+          mode="contained" onPress={() => console.log('Pressed')}>
+          Buscar
+        </Button>
+      </View>
+      <View style={{marginTop:20, flexDirection:'row'}}>
+        <Button 
+          icon="pencil-outline" 
+          mode="contained" onPress={() => console.log('Pressed')}>
+          Actualizar
+        </Button>
+        <Button 
+          style={{backgroundColor:'red',marginLeft:10}}
+          icon="delete-outline" 
+          mode="contained" onPress={() => console.log('Pressed')}>
+          Eliminar
+        </Button>
+      </View>
+      <View style={{marginTop:20, flexDirection:'row'}}>
+        <Button 
+          icon="view-list" 
+          mode="contained" onPress={() => console.log('Pressed')}>
+          Listar
+        </Button>
+        
+      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
