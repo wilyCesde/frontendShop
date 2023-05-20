@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper'
 import { useForm, Controller } from 'react-hook-form';
-
-import {styles} from '../assets/styles/styles'
+import { styles } from '../assets/styles/styles'
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Customer() {
+  const [isError, sertIsError] = useState(false);
+  const [message, setMessage] = useState('');
   // configuración del formulario
   const { control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -13,7 +16,20 @@ export default function Customer() {
     }
   });
 
-  const onSubmit = data => console.log(data);
+  const onSave = async (data) => {
+    let nombre = data.firstName;
+    let apellidos = data.lastName;
+    const response = await axios.post(`http://127.0.0.1:3000/api/clientes`, {
+      nombre,
+      apellidos,
+    });
+    sertIsError(false);
+    setMessage("Cliente agregado correctamente...")
+    setTimeout(() => {
+      setMessage("")
+    }, 2000)
+    reset();
+  }
 
   return (
     <View style={styles.container}>
@@ -55,34 +71,34 @@ export default function Customer() {
         name="lastName"
       />
       {errors.lastName && <Text style={{ color: 'red' }}>El apellido es obligatorio</Text>}
-      <View style={{marginTop:20, flexDirection:'row'}}>
-        <Button 
-          icon="content-save" 
-          mode="contained" onPress={() => console.log('Pressed')}>
+      <Text style={{ color: isError ? 'red' : 'green' }}> {message}</Text>
+      <View style={{ marginTop: 20, flexDirection: 'row' }}>
+        <Button
+          icon="content-save"
+          mode="contained" onPress={handleSubmit(onSave)}>
           Guardar
         </Button>
-        <Button 
-          style={{backgroundColor:'orange',marginLeft:10}}
-          icon="card-search-outline" 
+        <Button
+          style={{ backgroundColor: 'orange', marginLeft: 10 }}
+          icon="card-search-outline"
           mode="contained" onPress={() => console.log('Pressed')}>
           Buscar
         </Button>
       </View>
-      <View style={{marginTop:20, flexDirection:'row'}}>
-        <Button 
-          icon="pencil-outline" 
+      <View style={{ marginTop: 20, flexDirection: 'row' }}>
+        <Button
+          icon="pencil-outline"
           mode="contained" onPress={() => console.log('Pressed')}>
           Actualizar
         </Button>
-        <Button 
-          style={{backgroundColor:'red',marginLeft:10}}
-          icon="delete-outline" 
+        <Button
+          style={{ backgroundColor: 'red', marginLeft: 10 }}
+          icon="delete-outline"
           mode="contained" onPress={() => console.log('Pressed')}>
           Eliminar
         </Button>
       </View>
-    
+
     </View>
   );
 }
-
