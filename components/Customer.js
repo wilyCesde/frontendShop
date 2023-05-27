@@ -8,9 +8,9 @@ import axios from 'axios';
 export default function Customer() {
   const [isError, sertIsError] = useState(false);
   const [message, setMessage] = useState('');
-  cont[idSearch, setIdsearch] = useState('');
+  const [idSearch, setIdsearch] = useState('');
   // configuración del formulario
-  const { control, handleSubmit, formState: { errors }, reset } = useForm({
+  const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm({
     defaultValues: {
       firstName: '',
       lastName: ''
@@ -31,7 +31,18 @@ export default function Customer() {
     }, 2000)
     reset();
   }
-
+  const onSerch = async () => {
+    const response = await axios.get(`http://127.0.0.1:3000/api/clientes/${idSearch}`);
+    if (!response.data.error) {//encuentra el idSearch
+      setValue('firstName', response.data.nombre);
+      setValue('lastName', response.data.apellidos);
+      setMessage("");
+      sertIsError(false);
+    }else{
+      sertIsError(true);
+      setMessage("El Id del Cliente No Existe Intenetelo con otro...");
+    }
+  }
   return (
     <View style={styles.container}>
       <Text>Actualización de Clientes</Text>
@@ -91,7 +102,7 @@ export default function Customer() {
           style={{ backgroundColor: 'orange', marginLeft: 10 }}
           icon="card-search-outline"
           mode="contained"
-        //onPress={onSerch} 
+          onPress={onSerch}
         >
           Buscar
         </Button>
