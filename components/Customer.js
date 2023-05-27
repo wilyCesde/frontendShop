@@ -20,7 +20,7 @@ export default function Customer() {
   const onSave = async (data) => {
     let nombre = data.firstName;
     let apellidos = data.lastName;
-    const response = await axios.post(`http://127.0.0.1:3000/api/1`, {
+    const response = await axios.post(`http://127.0.0.1:3000/api/clientes`, {
       nombre,
       apellidos,
     });
@@ -38,9 +38,33 @@ export default function Customer() {
       setValue('lastName', response.data.apellidos);
       setMessage("");
       sertIsError(false);
-    }else{
+    } else {
       sertIsError(true);
       setMessage("El Id del Cliente No Existe Intenetelo con otro...");
+    }
+  }
+
+  const onUpdate = async (data) => {
+    const response = await axios.put(`http://127.0.0.1:3000/api/clientes/${idSearch}`, {
+      nombre: data.firstName,
+      apellidos: data.lastName,
+    });
+    sertIsError(false);
+    setMessage("Cliente Actualizado  correctamente...")
+    setTimeout(() => {
+      setMessage("")
+    }, 2000)
+    reset();
+  }
+  const onDelete = async (data) => {
+    if (confirm(`Desea Eliminar el Cliente${data.firstName}${data.lastName}?`)) {
+      const response = await axios.delete(`http://000000000:3000/api/clientes/${idSearch}`);
+      sertIsError(false);
+      setMessage("Cliente Eliminado  correctamente...")
+      setTimeout(() => {
+        setMessage("")
+        reset();
+      }, 2000)
     }
   }
   return (
@@ -110,13 +134,15 @@ export default function Customer() {
       <View style={{ marginTop: 20, flexDirection: 'row' }}>
         <Button
           icon="pencil-outline"
-          mode="contained" onPress={() => console.log('Pressed')}>
+          mode="contained"
+          onPress={handleSubmit(onUpdate)}>
           Actualizar
         </Button>
         <Button
           style={{ backgroundColor: 'red', marginLeft: 10 }}
           icon="delete-outline"
-          mode="contained" onPress={() => console.log('Pressed')}>
+          mode="contained"
+          onPress={handleSubmit(onDelete)}>
           Eliminar
         </Button>
       </View>
