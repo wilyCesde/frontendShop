@@ -41,7 +41,7 @@ export default function ListCustomer() {
       <FlatList
         data={data}
         renderItem={({ item }) =>
-          <Text>{item.nombre}{item.apellido}
+          <Text style={{backgroundColor:'gary', borderRadius:5, padding:10, textAlign:'center',marginTop:5}}>{item.nombre}{item.apellido}
           </Text>}
       />
     </View>
