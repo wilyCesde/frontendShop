@@ -58,13 +58,14 @@ export default function Customer() {
   }
   const onDelete = async (data) => {
     if (confirm(`Desea Eliminar el Cliente${data.firstName}${data.lastName}?`)) {
-      const response = await axios.delete(`http://000000000:3000/api/clientes/${idSearch}`);
+      const response = await axios.delete(`http://127.0.0.1:3000/api/clientes/${idSearch}`);
       sertIsError(false);
       setMessage("Cliente Eliminado  correctamente...")
       setTimeout(() => {
         setMessage("")
         reset();
       }, 2000)
+
     }
   }
   return (
