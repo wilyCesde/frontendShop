@@ -29,6 +29,9 @@ export default function ListCustomer() {
 
   return (
     <View style={styles.container}>
+
+
+
       <Button
         style={{ backgroundColor: 'red', marginLeft: 10, marginBottom: 10 }}
         icon="card-search-outline"
@@ -37,13 +40,21 @@ export default function ListCustomer() {
       >
         Listar Clientes
       </Button>
+
+
       <Text>Listado de Clientes</Text>
+
+
       <FlatList
         data={data}
         renderItem={({ item }) =>
-          <Text style={{ backgroundColor: 'gary', borderRadius: 5, padding: 10, textAlign: 'center', marginTop: 5 }}>{item.nombre}{item.apellido}
+          <Text style=
+            {{ backgroundColor: 'gary', borderRadius: 5, padding: 10, textAlign: 'center', marginTop: 5 }}>
+            {item.nombre}{item.apellido}
           </Text>}
       />
+
+
     </View>
   );
 }
