@@ -8,6 +8,7 @@ import axios from 'axios';
 export default function Customer() {
   const [isError, sertIsError] = useState(false);
   const [message, setMessage] = useState('');
+  cont[idSearch, setIdsearch] = useState('');
   // configuración del formulario
   const { control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -19,7 +20,7 @@ export default function Customer() {
   const onSave = async (data) => {
     let nombre = data.firstName;
     let apellidos = data.lastName;
-    const response = await axios.post(`http://127.0.0.1:3000/api/clientes`, {
+    const response = await axios.post(`http://127.0.0.1:3000/api/1`, {
       nombre,
       apellidos,
     });
@@ -34,6 +35,14 @@ export default function Customer() {
   return (
     <View style={styles.container}>
       <Text>Actualización de Clientes</Text>
+      <TextInput
+        style={{ marginTop: 5, marginBottom: 5 }}
+        label="Id cliente a buscar"
+        mode="outlined"
+        value={idSearch}
+        onChangeText={idSearch => setIdsearch(idSearch)}
+
+      />
       <Controller
         control={control}
         rules={{
@@ -81,7 +90,9 @@ export default function Customer() {
         <Button
           style={{ backgroundColor: 'orange', marginLeft: 10 }}
           icon="card-search-outline"
-          mode="contained" onPress={() => console.log('Pressed')}>
+          mode="contained"
+        //onPress={onSerch} 
+        >
           Buscar
         </Button>
       </View>
