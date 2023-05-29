@@ -8,18 +8,21 @@ function Login() {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newName, setNewName] = useState('');
-  const [newRole, setNewRole] = useState('');
+  const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [message, setMessage] = useState('');
   const [showRegisterForm, setShowRegisterForm] = useState(false); // Estado para controlar la visibilidad del formulario de registro
 
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:3000/api/users/login', { username, password });
-      // aquí puedes guardar la respuesta en el estado de la aplicación o en el almacenamiento local si la autenticación es exitosa
-      // la respuesta probablemente contendrá un token de autenticación que puedes usar para futuras solicitudes autenticadas
+      const response = await axios.post('http://127.0.0.1:3000/api/login', { username, password });
+      // Obtener el rol del usuario de la respuesta
+      const userRole = response.data.role;
+      // Guardar el rol en el estado
+      setRole(userRole);
+      // Resto del código...
     } catch (error) {
-      // si hay un error (por ejemplo, credenciales incorrectas), puedes establecer un mensaje de error para mostrar en el formulario
       setErrorMessage('Las credenciales son incorrectas. Por favor, intenta de nuevo.');
     }
   };
@@ -30,7 +33,7 @@ function Login() {
         username: newUsername,
         password: newPassword,
         name: newName,
-        role: newRole
+        role,
       });
 
       if (response.data) {
@@ -43,12 +46,13 @@ function Login() {
       setNewUsername('');
       setNewPassword('');
       setNewName('');
-      setNewRole('');
+      setRole(''); // Cambiado de setRolea setRole
     } catch (error) {
       setMessage('Error al registrar el usuario');
       console.log(error);
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -66,6 +70,7 @@ function Login() {
         placeholder='Contraseña'
         secureTextEntry
       />
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
@@ -94,13 +99,26 @@ function Login() {
             value={newName}
             onChangeText={setNewName}
             placeholder='Nombre'
+
           />
-          <TextInput
-            style={styles.input}
-            value={newRole}
-            onChangeText={setNewRole}
-            placeholder='Rol'
-          />
+          <View style={styles.radioContainer}>
+            <Text style={styles.label}>Rol:</Text>
+            <View style={styles.radioGroup}>
+              <TouchableOpacity
+                style={styles.radioButton}
+                onPress={() => setRole('administrador')}
+              >
+                <Text style={styles.radioText}>Administrador</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.radioButton}
+                onPress={() => setRole('usuario')}
+              >
+                <Text style={styles.radioText}>Usuario</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text style={styles.buttonText}>Registrar usuario</Text>
           </TouchableOpacity>
@@ -155,7 +173,25 @@ const styles = StyleSheet.create({
     color: 'green',
     marginTop: 10,
   },
+  radioContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  radioGroup: {
+    flexDirection: 'row',
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  radioText: {
+    marginLeft: 5,
+  },
 });
 
 export default Login;
-
