@@ -11,7 +11,7 @@ function Login() {
   const [newRole, setNewRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [message, setMessage] = useState('');
-
+  const [showRegisterForm, setShowRegisterForm] = useState(false); // Estado para controlar la visibilidad del formulario de registro
 
   const handleLogin = async () => {
     try {
@@ -23,8 +23,8 @@ function Login() {
       setErrorMessage('Las credenciales son incorrectas. Por favor, intenta de nuevo.');
     }
   };
+
   const handleRegister = async () => {
-    
     try {
       const response = await axios.post('http://127.0.0.1:3000/api/users', {
         username: newUsername,
@@ -32,13 +32,13 @@ function Login() {
         name: newName,
         role: newRole
       });
-  
+
       if (response.data) {
         setMessage('Usuario registrado correctamente');
       } else {
         setMessage('Error al registrar el usuario');
       }
-  
+
       // Restablecer los campos del formulario
       setNewUsername('');
       setNewPassword('');
@@ -49,9 +49,7 @@ function Login() {
       console.log(error);
     }
   };
-  
-  
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Iniciar sesión</Text>
@@ -71,35 +69,50 @@ function Login() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        value={newUsername}
-        onChangeText={setNewUsername}
-        placeholder='Nuevo nombre de usuario'
-      />
-      <TextInput
-        style={styles.input}
-        value={newPassword}
-        onChangeText={setNewPassword}
-        placeholder='Nueva contraseña'
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        value={newName}
-        onChangeText={setNewName}
-        placeholder='Nombre'
-      />
-      <TextInput
-        style={styles.input}
-        value={newRole}
-        onChangeText={setNewRole}
-        placeholder='Rol'
-      />
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrar usuario</Text>
-      </TouchableOpacity>
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+
+      {!showRegisterForm ? (
+        <TouchableOpacity style={styles.button} onPress={() => setShowRegisterForm(true)}>
+          <Text style={styles.buttonText}>Registrar usuario</Text>
+        </TouchableOpacity>
+      ) : (
+        <>
+          <TextInput
+            style={styles.input}
+            value={newUsername}
+            onChangeText={setNewUsername}
+            placeholder='Nuevo nombre de usuario'
+          />
+          <TextInput
+            style={styles.input}
+            value={newPassword}
+            onChangeText={setNewPassword}
+            placeholder='Nueva contraseña'
+            secureTextEntry
+          />
+          <TextInput
+            style={styles.input}
+            value={newName}
+            onChangeText={setNewName}
+            placeholder='Nombre'
+          />
+          <TextInput
+            style={styles.input}
+            value={newRole}
+            onChangeText={setNewRole}
+            placeholder='Rol'
+          />
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Registrar usuario</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => setShowRegisterForm(false)}>
+            <Text style={styles.buttonText}>Cancelar</Text>
+          </TouchableOpacity>
+
+          {message ? <Text style={styles.message}>{message}</Text> : null}
+        </>
+      )}
+
+      {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
     </View>
   );
 }
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
     color: 'green',
     marginTop: 10,
   },
-  
 });
 
 export default Login;
+
