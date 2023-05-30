@@ -19,13 +19,12 @@ function Login() {
       const response = await axios.post('http://127.0.0.1:3000/api/login', { username, password });
       // Obtener el rol del usuario de la respuesta
       const userRole = response.data.role;
-      // Guardar el rol en el estado
       setRole(userRole);
-      // Resto del código...
     } catch (error) {
       setErrorMessage('Las credenciales son incorrectas. Por favor, intenta de nuevo.');
     }
   };
+
 
   const handleRegister = async () => {
     try {
@@ -36,17 +35,20 @@ function Login() {
         role,
       });
 
+
       if (response.data) {
         setMessage('Usuario registrado correctamente');
       } else {
         setMessage('Error al registrar el usuario');
       }
 
+
       // Restablecer los campos del formulario
       setNewUsername('');
       setNewPassword('');
       setNewName('');
-      setRole(''); // Cambiado de setRolea setRole
+      setRole('');
+
     } catch (error) {
       setMessage('Error al registrar el usuario');
       console.log(error);
@@ -63,6 +65,7 @@ function Login() {
         onChangeText={setUsername}
         placeholder='Nombre de usuario'
       />
+
       <TextInput
         style={styles.input}
         value={password}
@@ -87,6 +90,7 @@ function Login() {
             onChangeText={setNewUsername}
             placeholder='Nuevo nombre de usuario'
           />
+
           <TextInput
             style={styles.input}
             value={newPassword}
@@ -94,13 +98,14 @@ function Login() {
             placeholder='Nueva contraseña'
             secureTextEntry
           />
+          
           <TextInput
             style={styles.input}
             value={newName}
             onChangeText={setNewName}
             placeholder='Nombre'
-
           />
+          
           <View style={styles.radioContainer}>
             <Text style={styles.label}>Rol:</Text>
             <View style={styles.radioGroup}>
