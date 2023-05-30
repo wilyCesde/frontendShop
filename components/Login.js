@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -12,19 +15,28 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const [message, setMessage] = useState('');
   const [showRegisterForm, setShowRegisterForm] = useState(false); // Estado para controlar la visibilidad del formulario de registro
-
+  const navigation = useNavigation();
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:3000/api/login', { username, password });
-      // Obtener el rol del usuario de la respuesta
+      const response = await axios.post('http://127.0.0.1:3000/api/login', {
+        username,
+        password,
+      });
       const userRole = response.data.role;
-      setRole(userRole);
+
+      if (response.data.success) {
+        navigation.navigate('Home');
+      } else {
+        setErrorMessage('Las credenciales son incorrectas. Por favor, intenta de nuevo.');
+      }
     } catch (error) {
-      setErrorMessage('Las credenciales son incorrectas. Por favor, intenta de nuevo.');
+      setErrorMessage('Error en el servidor. Por favor, intenta de nuevo más tarde.');
+      console.log(error);
     }
   };
-
+  
 
   const handleRegister = async () => {
     try {
