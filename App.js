@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeTabs from './components/HomeTabs';
 import Login from './components/Login';
 import RegisterCar from './components/RegisterCar';
+import RentForm from './components/RentForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} options={{ title: 'Iniciar sesión' }} />
         <Stack.Screen name="Home" component={HomeTabs} options={{ title: 'Sistema de Almacen' }} />
         <Stack.Screen name="cars" component={RegisterCar} options={{ title: 'Sistema de Almacen' }} />
+        <Stack.Screen name="rent" component={RentForm} options={{ title: 'Alquilar vehículo' }} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

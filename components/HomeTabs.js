@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import RegisterCar from './RegisterCar';
 import ListCustomer from './ListCustomer';
 import Customer from './Customer';
+import RentForm from './RentForm';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -57,6 +59,16 @@ export default function HomeTabs() {
           options={{
             title: 'Registrar Vehículo',
             tabBarIcon: () => <MaterialIcons name="add" size={24} color="black" />,
+          }}
+        />
+      )}
+      {loggedIn && role === 'administrador' && (
+        <Tab.Screen
+          name="RentForm"
+          component={RentForm}
+          options={{
+            title: 'Alquilar Vehículo',
+            tabBarIcon: () => <MaterialIcons name="car-rental" size={24} color="black" />,
           }}
         />
       )}
